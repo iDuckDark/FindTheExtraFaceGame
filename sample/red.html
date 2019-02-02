@@ -1,0 +1,60 @@
+<html><head>
+    <title>JavaScript Matching Game</title>
+	    <style>
+            img {position: absolute}
+            div {position: absolute; width: 500px; height: 500px}
+            #rightSide {left: 500px; border-left: 1px solid black}
+            </style>
+</head>
+    <body onload="generateFaces()">
+	<h1> Matching game </h1>
+	<p> Find and click on the extra smiling face on the left side. </p>
+    <div id="leftSide"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 82px; left: 9px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 365px; left: 196px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 359px; left: 212px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 133px; left: 113px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 281px; left: 73px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 232px; left: 313px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 345px; left: 60px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 130px; left: 347px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 310px; left: 188px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 201px; left: 385px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 19px; left: 16px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 146px; left: 185px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 257px; left: 341px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 194px; left: 84px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 373px; left: 247px; background: red;"></div>
+    <div id="rightSide"><div id="leftSide"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 82px; left: 9px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 365px; left: 196px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 359px; left: 212px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 133px; left: 113px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 281px; left: 73px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 232px; left: 313px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 345px; left: 60px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 130px; left: 347px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 310px; left: 188px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 201px; left: 385px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 19px; left: 16px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 146px; left: 185px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 257px; left: 341px;"><img src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png" style="top: 194px; left: 84px;"></div></div>
+	    <script>
+		var numberOfFaces = 5;
+var theLeftSide = document.getElementById("leftSide");
+var theRightSide = document.getElementById("rightSide");
+var theBody = document.getElementsByTagName("body")[0];
+var rounds = 0;
+function generateFaces(){
+      for (var i = 0; i < numberOfFaces; i++) {
+              smile = document.createElement("img");
+              smile.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+              var randomTop = Math.random() * 401;
+              randomTop = Math.floor(randomTop);
+              var randomLeft = Math.random() * 401;
+              randomLeft = Math.floor(randomLeft);
+              smile.style.top = randomTop + "px";
+              smile.style.left = randomLeft + "px";
+              theLeftSide.appendChild(smile);
+      }
+
+      leftSideImages = theLeftSide.cloneNode(true);
+      leftSideImages.removeChild(leftSideImages.lastChild);
+      theRightSide.appendChild(leftSideImages);
+
+      theLeftSide.lastChild.onclick = function nextLevel(event){
+            event.stopPropagation();
+            numberOfFaces += 5;
+            rounds ++;
+            removeAllChildren(theLeftSide);
+            removeAllChildren(theRightSide);
+            generateFaces();
+      }
+
+      theBody.onclick = function gameOver(){
+            alert("Game Over!\n\n" + "You have got through " + rounds + " rounds!");
+            theLeftSide.lastChild.style.background = "red";
+            theBody.onclick = null;
+            theLeftSide.lastChild.onclick = null;
+      }
+}
+function removeAllChildren (parent){
+      while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+      }
+}
+		</script>
+	
+</body></html>

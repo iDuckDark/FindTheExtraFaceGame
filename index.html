@@ -1,0 +1,146 @@
+<!-- Part 4 by nevinganesan@hotmail.com -->
+<!DOCTYPE html>
+<html> 
+	<head>
+		<title> Matching Game Part 4</title>
+		<meta name="author" content="Nevin Wong Syum Ganesan , nevinganesan@hotmail.com">
+		<meta name="description" content="Part 4 Finishing the game">	
+		<style>
+		img{
+			position:absolute;
+			height: 100px;
+			width: 100px;
+			}
+		div{
+			position: absolute;
+			height:500px;
+			width:500px;	
+			top: 2;
+		}
+		#rightSide { 
+			left: 50%; 
+            border-left: 2px solid black;
+		}
+		h1, p{
+			text-align: center;
+		}
+		</style>
+
+	</head>
+	
+	<body onload="generateFaces()"><h1>Matching Game</h1>
+	<p>Click on the extra smiling face on the left.</p>
+	<p id="scoreID">Your current Score is 0 </p>
+	<p> Timer: <span id="minutes"></span>:<span id="seconds"></span> </p>
+	<div id="leftSide"></div>
+    <div id="rightSide"></div>	
+	<script>
+		var numberOfFaces=5;
+		var theLeftSide = document.getElementById("leftSide");
+		var theRightSide = document.getElementById("rightSide");
+		var theBody = document.getElementsByTagName("body")[0];
+		var score = 0;
+		var theScoreTag = document.getElementById("scoreID");
+
+		//===========================PART 2======================================
+		function generateFaces(){
+			var counter= numberOfFaces;
+			while(counter>0){
+				createImages();
+				counter--;
+			}
+		//===========================PART 3======================================
+		cloneLeftToRight();
+		//===========================PART 4======================================
+		clickedCorrectAnswer();
+		clickedWrongAnswer();	
+		}
+		//===========================PART 2======================================
+		function createImages(){
+				var image=document.createElement("img");
+				image.setAttribute("src","http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png");
+				var randomTop=Math.random()*400; //random values from 0 to 400
+				var randomLeft=Math.random()*400; //random values from 0 to 400
+			    image.style.top=randomTop+"px";
+				image.style.left=randomLeft+"px";
+				theLeftSide.appendChild(image);
+		}
+		//=========================PART 3=========================================
+		function cloneLeftToRight(){
+			leftSideImages = theLeftSide.cloneNode(true); //clone the whole branch (true)
+			leftSideImages.removeChild(leftSideImages.lastChild);//remove the last child of the cloned branch (one random image)
+			theRightSide.appendChild(leftSideImages); //add in the the right side
+		}
+
+		//========================PART 4 ======================================
+		//for clicking the correct answer
+		function clickedCorrectAnswer(){
+			theLeftSide.lastChild.onclick=function nextLevel(event){
+				//alert("Congratulations, you have selected the correct colour, proceed to next Level now");
+				event.stopPropagation();
+				removeLeftRightSide();
+				numberOfFaces+=5;
+				score++;
+				document.getElementById("scoreID").innerHTML = "Your current Score is " + score;
+				generateFaces();
+			
+			};
+		}
+		//===========================remove everything======================================
+		function removeLeftRightSide(){
+			while(theLeftSide.firstChild){
+				theLeftSide.removeChild(theLeftSide.firstChild);
+			}
+			while(theRightSide.firstChild){
+				theRightSide.removeChild(theRightSide.firstChild);
+			}
+		}
+		//============================================================================
+		//for clicking the wrong answer
+		function clickedWrongAnswer(){
+			theBody.onclick = function gameOver() {
+			//theLeftSide.lastChild.style.background = "red";
+			var seconds = document.getElementById("seconds").innerHTML;
+			var minutes = document.getElementById("minutes").innerHTML;
+			var displayAlert = " Game Over ! "
+			var displayScore = " Your score is " + score ;
+			//check for null
+			if(!minutes){
+				minutes="00";
+			}
+			//check for null
+			if(!seconds){
+				seconds="00";
+			}
+			var displayTime = " Your time taken is " + minutes + ":" + seconds ;  
+			//alert(displayAlert); alert(displayTime);
+			alert(displayAlert + '\n' + displayScore + '\n' + displayTime);
+			theBody.onclick = null;
+			theLeftSide.lastChild.onclick = null;
+			promptRestart();
+			};
+		}
+		function promptRestart(){
+			if (confirm("Do you want to restart the game ? Click refresh to restart later")) {
+    			location.reload();
+			} 
+			else {
+    			//nothing
+			}
+		}
+		//timer
+		setTimeout(function() { startTimer(); }, 0);
+		function startTimer(){
+		    var sec = 0;
+		    function pad ( val ) { return val > 9 ? val : "0" + val; }
+		    setInterval( function(){
+		        document.getElementById("seconds").innerHTML=pad(++sec%60);
+		        document.getElementById("minutes").innerHTML=pad(parseInt(sec/60,10)); 
+		    }, 1000);
+		}	
+		</script>
+
+	</body>
+	
+	
+</html>
